@@ -3,20 +3,23 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 
 interface CharacterCardProps {
   name: string;
-  image?: string;
-  description: string;
+  reward: string;
+  ocupation: string;
+  image: string;
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
   name,
+  reward,
+  ocupation,
   image,
-  description,
 }) => {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: image }} style={styles.image} />
+      <Image source={{ uri: `${image}` }} style={styles.image} />
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.subtitle}>{reward}</Text>
+      <Text style={styles.description}>{ocupation}</Text>
     </View>
   );
 };
@@ -45,6 +48,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 5,
   },
   description: {
     fontSize: 14,

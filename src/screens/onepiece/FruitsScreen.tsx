@@ -1,46 +1,45 @@
-import React from 'react';
-import { View, Text, FlatList, ListRenderItem } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import FruitCard from '../../components/FruitCard';
 import { Fruit } from '../../types/index';
 
-const fruitsData: Fruit[] = [
-  {
-    id: 1,
-    name: 'Gomu Gomu no Mi',
-    type: 'Paramecia',
-    description: 'Allows the user to stretch their body like rubber.',
-  },
-  {
-    id: 2,
-    name: 'Mera Mera no Mi',
-    type: 'Logia',
-    description: 'Grants the user the ability to control fire.',
-  },
-  {
-    id: 3,
-    type: 'Logia',
-    name: 'Hie Hie no Mi',
-    description: 'Allows the user to create and control ice.',
-  },
-  {
-    id: 4,
-    type: 'Paramecia',
-    name: 'Yami Yami no Mi',
-    description: 'Grants the user the power of darkness.',
-  },
-];
-
 const FruitsScreen = () => {
+  const [fruits, setFruits] = React.useState<Fruit[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fruitsData = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch('https://api.api-onepiece.com/v2/fruits/en');
+
+      if (!response.ok) {
+        throw new Error('Error al cargar los datos de las frutas');
+      }
+      const data = await response.json();
+      setFruits(data);
+      setError(null);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Error desconocido');
+    }
+  };
+
+  useEffect(() => {
+    fruitsData();
+  }, []);
+
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>
-        Fruits of the Devil
-      </Text>
       <FlatList
-        data={fruitsData}
+        data={fruits}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <FruitCard name={item.name} description={item.description} />
+          <FruitCard
+            name={item.roman_name}
+            type={item.type}
+            image={item.filename}
+          />
         )}
       />
     </View>

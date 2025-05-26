@@ -1,15 +1,16 @@
 export interface Character {
   id: number;
   name: string;
-  image?: string;
-  description: string;
+  bounty: string;
+  job: string;
+  filename: string;
 }
 
 export interface Fruit {
   id: number;
-  name: string;
+  roman_name: string;
   type: string;
-  description: string;
+  filename: string;
 }
 
 export interface User {

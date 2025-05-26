@@ -1,35 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ListRenderItem } from 'react-native';
 import CharacterCard from '../../components/CharacterCard';
 import { Character } from '../../types/index';
 
-const charactersData: Character[] = [
-  {
-    id: 1,
-    name: 'Monkey D. Luffy',
-    description: 'Captain of the Straw Hat Pirates',
-  },
-  {
-    id: 2,
-    name: 'Roronoa Zoro',
-    description: 'Swordsman of the Straw Hat Pirates',
-  },
-  { id: 3, name: 'Nami', description: 'Navigator of the Straw Hat Pirates' },
-  { id: 4, name: 'Usopp', description: 'Sniper of the Straw Hat Pirates' },
-  { id: 5, name: 'Sanji', description: 'Cook of the Straw Hat Pirates' },
-];
-
 const CharactersScreen = () => {
-  const renderItem: ListRenderItem<Character> = ({ item }) => (
-    <CharacterCard name={item.name} description={item.description} />
-  );
+  const [characters, setCharacter] = React.useState<Character[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const charactersData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        'https://api.api-onepiece.com/v2/characters/en'
+      );
+
+      if (!response.ok) {
+        throw new Error('Error al cargar los datos de los personajes');
+      }
+      const data = await response.json();
+      setCharacter(data);
+      setError(null);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Error desconocido');
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    charactersData();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>One Piece Characters</Text>
       <FlatList
-        data={charactersData}
-        renderItem={renderItem}
+        data={characters}
+        renderItem={({ item }) => (
+          <CharacterCard
+            name={item.name}
+            image={item.filename}
+            reward={item.bounty}
+            ocupation={item.job}
+          />
+        )}
         keyExtractor={(item) => item.id.toString()}
       />
     </View>

@@ -3,16 +3,16 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 
 interface FruitCardProps {
   name: string;
-  description: string;
-  image?: any;
+  type: string;
+  image: string;
 }
 
-const FruitCard: React.FC<FruitCardProps> = ({ name, description, image }) => {
+const FruitCard: React.FC<FruitCardProps> = ({ name, image, type }) => {
   return (
     <View style={styles.card}>
-      <Image source={image} style={styles.image} />
+      <Image source={{ uri: `${image}` }} style={styles.image} />
       <Text style={styles.title}>{name}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.subtitle}>{type}</Text>
     </View>
   );
 };
@@ -36,11 +36,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     borderRadius: 10,
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 5,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 5,
+    textAlign: 'center',
   },
   description: {
     fontSize: 14,

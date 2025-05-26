@@ -19,9 +19,11 @@ const Input: React.FC<InputProps> = ({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor="#666"
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
+        autoCapitalize="none"
       />
     </View>
   );
@@ -30,14 +32,16 @@ const Input: React.FC<InputProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginVertical: 10,
+    marginVertical: 8,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: '#f8f9fa',
   },
 });
 
